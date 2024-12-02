@@ -1,4 +1,4 @@
-use std::{fs, i32};
+use std::{char, env, fs, i16, i32};
 
 fn main() {
     println!("Hello, world!");
@@ -38,17 +38,9 @@ fn main() {
         for (i, d0) in v1.iter().enumerate() {
             let d1 = v2[i];
             diff = diff + (d0 - d1).abs();
+            // println!("{} - {} - {} - {}", i, d0, d1, diff);
         }
         diff
-    }
-
-    fn get_vec_sim(v1: Vec<i32>, v2: Vec<i32>) -> i32 {
-        let mut sim: i32 = 0;
-        for d0 in v1.iter() {
-            let count = v2.iter().filter(|&d1| *d1 == *d0).count() as i32;
-            sim = sim + (d0 * count);
-        }
-        sim
     }
 
     let contents = read_file("./day1/input");
@@ -58,7 +50,6 @@ fn main() {
     let v1 = split_vec_sort(vec_num.clone(), 0);
     let v2 = split_vec_sort(vec_num.clone(), 1);
 
-    let sim = get_vec_sim(v1, v2);
-
-    println!("The result for Day1Part2 = {}", sim);
+    let diff = get_vec_diff(v1, v2);
+    println!("The result for Day1Part1 = {}", diff);
 }
