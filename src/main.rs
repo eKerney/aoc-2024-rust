@@ -26,66 +26,86 @@ fn main() {
     }
 
     fn check_reports(vec_num: Vec<Vec<i32>>) -> i32 {
-        let mut safe_report_count: i32 = 0;
         // set safe at 0
+        let mut safe_report_count: i32 = 0;
         for v in vec_num.iter() {
             println!("{:?}", v);
-            let mut level_safe: bool = false;
-            let (mut dir0, mut dir1) = (0, 0);
+            let mut level_safe: bool = true;
+            let mut error_count: i32 = 0;
+            let (mut dir0, mut dir1, mut dir_init) = (0, 0, 0);
             for (i, d) in v.iter().enumerate() {
-                // println!("level_safe - {}", level_safe);
-                dir0 = match i == (v.len() - 1) {
-                    false => d - v[i + 1],
-                    true => dir0,
+                // skip last iteration to avoid double counting errors
+                println!("dir_init: {}", dir_init);
+                dir_init = match i == 0 {
+                    true => d - (v[i + 1]),
+                    false => dir_init,
                 };
-                dir1 = match i == (v.len() - 2) || i == (v.len() - 1) {
-                    false => v[i + 1] - v[i + 2],
-                    true => dir1,
+                if i != v.len() - 1 {
+                    dir0 = match i == (v.len() - 1) {
+                        false => d - v[i + 1],
+                        true => dir0,
+                    };
+                    dir1 = match i == (v.len() - 2) || i == (v.len() - 1) {
+                        false => v[i + 1] - v[i + 2],
+                        true => dir1,
+                    };
+                    if level_safe == false {
+                        if (dir_init > 0) != (dir1 > 0) {
+                            println!("2first case - dir0 - {} - dir1 - {} ", dir0, dir1);
+                            error_count += 1;
+                        } else if dir0.abs() < 1 || dir0.abs() > 3 {
+                            println!("2dir0 out range - dir0 - {} ", dir0);
+                            error_count += 1;
+                        }
+                        // } else if dir1.abs() < 1 || dir1.abs() > 3 {
+                        //     println!("2dir1 out range - dir1 - {} ", dir1);
+                        //     error_count += 1;
+                        // }
+                    };
+                    if level_safe == true {
+                        if (dir0 > 0) != (dir1 > 0) {
+                            println!("first case - dir0 - {} - dir1 - {} ", dir0, dir1);
+                            level_safe = false;
+                            error_count = error_count + 1;
+                        } else if dir0.abs() < 1 || dir0.abs() > 3 {
+                            println!("dir0 out range - dir0 - {} ", dir0);
+                            level_safe = false;
+                            error_count = error_count + 1;
+                        }
+                        // else if dir1.abs() < 1 || dir1.abs() > 3 {
+                        //     println!("dir1 out range - dir1 - {} ", dir1);
+                        //     level_safe = false;
+                        //     error_count = error_count + 1;
+                        // }
+                        else {
+                            level_safe = true;
+                        };
+                    };
+
+                    // println!(
+                    //     "{} - {} - {} - {} - {} - {} - {}",
+                    //     i,
+                    //     d,
+                    //     dir0.abs(),
+                    //     dir1.abs(),
+                    //     level_safe,
+                    //     safe_report_count,
+                    //     error_count
+                    // );
                 };
-                if (dir0 > 0) != (dir1 > 0) {
-                    println!("first case - dir0 - {} - dir1 - {} ", dir0, dir1);
-                    level_safe = false;
-                    break;
-                } else if dir0.abs() < 1 || dir0.abs() > 3 {
-                    println!("dir0 out range - dir0 - {} ", dir0);
-                    level_safe = false;
-                    break;
-                } else if dir1.abs() < 1 || dir1.abs() > 3 {
-                    println!("dir1 out range - dir1 - {} ", dir1);
-                    level_safe = false;
-                    break;
-                } else {
-                    level_safe = true;
-                }
-                println!(
-                    "{} - {} - {} - {} - {}",
-                    d,
-                    dir0.abs(),
-                    dir1.abs(),
-                    level_safe,
-                    safe_report_count
-                );
             }
 
             safe_report_count = match level_safe {
                 true => safe_report_count + 1,
                 false => safe_report_count,
             };
+            safe_report_count = match error_count == 1 {
+                true => safe_report_count + 1,
+                false => safe_report_count,
+            };
+            println!("error_count - {}", error_count);
         }
         safe_report_count
-    }
-
-    fn check_all_num_pos(vec_num: Vec<Vec<i32>>) -> i32 {
-        for v in vec_num.iter() {
-            // println!("{:?}", v);
-            for (i, &d) in v.iter().enumerate() {
-                match d >= 0 {
-                    true => continue,
-                    false => println!("neg: {}", d),
-                }
-            }
-        }
-        1
     }
 
     let contents = read_file("./day2/input");
