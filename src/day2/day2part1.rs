@@ -94,5 +94,4 @@ fn main() {
 
     // check_all_num_pos(vec_num);
     println!("Safe Reports = {}", check_reports(vec_num));
-    // println!("The result for Day1Part2 = {}", sim);
 }
