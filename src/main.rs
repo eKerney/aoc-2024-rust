@@ -1,3 +1,4 @@
+use core::str;
 use std::{fs, i32};
 
 fn main() {
@@ -25,94 +26,66 @@ fn main() {
         return all_lines_nums;
     }
 
-    fn check_reports(vec_num: Vec<Vec<i32>>) -> i32 {
-        // set safe at 0
-        let mut safe_report_count: i32 = 0;
-        for v in vec_num.iter() {
-            println!("{:?}", v);
-            let mut level_safe: bool = true;
-            let mut error_count: i32 = 0;
-            let (mut dir0, mut dir1, mut dir_init) = (0, 0, 0);
-            for (i, d) in v.iter().enumerate() {
-                // skip last iteration to avoid double counting errors
-                println!("dir_init: {}", dir_init);
-                dir_init = match i == 0 {
-                    true => d - (v[i + 1]),
-                    false => dir_init,
-                };
-                if i != v.len() - 1 {
-                    dir0 = match i == (v.len() - 1) {
-                        false => d - v[i + 1],
-                        true => dir0,
-                    };
-                    dir1 = match i == (v.len() - 2) || i == (v.len() - 1) {
-                        false => v[i + 1] - v[i + 2],
-                        true => dir1,
-                    };
-                    if level_safe == false {
-                        if (dir_init > 0) != (dir1 > 0) {
-                            println!("2first case - dir0 - {} - dir1 - {} ", dir0, dir1);
-                            error_count += 1;
-                        } else if dir0.abs() < 1 || dir0.abs() > 3 {
-                            println!("2dir0 out range - dir0 - {} ", dir0);
-                            error_count += 1;
-                        }
-                        // } else if dir1.abs() < 1 || dir1.abs() > 3 {
-                        //     println!("2dir1 out range - dir1 - {} ", dir1);
-                        //     error_count += 1;
-                        // }
-                    };
-                    if level_safe == true {
-                        if (dir0 > 0) != (dir1 > 0) {
-                            println!("first case - dir0 - {} - dir1 - {} ", dir0, dir1);
-                            level_safe = false;
-                            error_count = error_count + 1;
-                        } else if dir0.abs() < 1 || dir0.abs() > 3 {
-                            println!("dir0 out range - dir0 - {} ", dir0);
-                            level_safe = false;
-                            error_count = error_count + 1;
-                        }
-                        // else if dir1.abs() < 1 || dir1.abs() > 3 {
-                        //     println!("dir1 out range - dir1 - {} ", dir1);
-                        //     level_safe = false;
-                        //     error_count = error_count + 1;
-                        // }
-                        else {
-                            level_safe = true;
-                        };
-                    };
-
-                    // println!(
-                    //     "{} - {} - {} - {} - {} - {} - {}",
-                    //     i,
-                    //     d,
-                    //     dir0.abs(),
-                    //     dir1.abs(),
-                    //     level_safe,
-                    //     safe_report_count,
-                    //     error_count
-                    // );
-                };
-            }
-
-            safe_report_count = match level_safe {
-                true => safe_report_count + 1,
-                false => safe_report_count,
-            };
-            safe_report_count = match error_count == 1 {
-                true => safe_report_count + 1,
-                false => safe_report_count,
-            };
-            println!("error_count - {}", error_count);
+    fn get_char_matrix(lines_vec: Vec<&str>) -> Vec<Vec<char>> {
+        let mut y: Vec<Vec<char>> = Vec::new();
+        for line in lines_vec.iter() {
+            println!("{}", line);
+            let x: Vec<_> = line.chars().collect();
+            y.push(x);
         }
-        safe_report_count
+        y
     }
 
-    let contents = read_file("./day2/input");
-    let lines_vec = lines_to_vec_str(&contents);
-    let vec_num = vec_str_to_num(lines_vec);
+    fn find_mul_prefix(instuct_str: &str) -> () {
+        let mul = "mul(";
+        match &instuct_str[..4] == mul {
+            true => {
+                println!("match mul( - {}", instuct_str);
+                parse_mul_func(instuct_str);
+            }
+            false => println!("no match - {}", instuct_str),
+        };
+    }
 
-    // check_all_num_pos(vec_num);
-    println!("Safe Reports = {}", check_reports(vec_num));
+    fn parse_mul_func(mul_str: &str) -> () {
+        let mut num1 = String::from("");
+        for (i, c) in mul_str[4..].chars().into_iter().enumerate() {
+            match c.is_numeric() {
+                true => {
+                    num1 = num1 + &c.to_string();
+                    println!("{}", num1);
+                }
+                false => {
+                    // check for comma
+                }
+            }
+            println!("{} _ {}", c, c.is_numeric());
+        }
+    }
+
+    fn iterate_lines(lines_vec: Vec<&str>) -> () {
+        for line in lines_vec.iter() {
+            println!("{:?}", line);
+            for (i, c) in line.chars().into_iter().enumerate() {
+                // println!("{} - {} - {} _ {} ", i, c, line.len(), line.len() - i);
+                let str_len = match line.len() - i < 20 {
+                    true => line.len() - i,
+                    false => 20,
+                };
+                // println!("str_len _ {}", str_len);
+                match c == 'm' {
+                    // true => println!("mul string - {:?}", &line[i..i + 4]),
+                    true => find_mul_prefix(&line[i..i + str_len]),
+                    false => (),
+                }
+            }
+        }
+    }
+
+    let contents = read_file("./day3/testInput");
+    let lines_vec = lines_to_vec_str(&contents);
+    iterate_lines(lines_vec);
+    // let chars = get_char_matrix(lines_vec);
+
     // println!("The result for Day1Part2 = {}", sim);
 }
