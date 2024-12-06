@@ -8,7 +8,7 @@ From the website:
 
 #### 2024 AoC Specs
 - 2024 Language: Rust 
-- Stars as of 12-2-2024: 2 
+- Stars as of 12-6-2024: 4 ****
 - 2023 Language: Rust 
 
 #### Rust Resources
@@ -16,6 +16,7 @@ From the website:
 - [half hour to learn rust](https://fasterthanli.me/articles/a-half-hour-to-learn-rust)
 - [rust for the impatient](https://www.youtube.com/watch?v=br3GIIQeefY)
 - [Georust.org](https://georust.org/)
+- [Rust Lang Book first-edition :) ](https://web.mit.edu/rust-lang_v1.25/arch/amd64_ubuntu1404/share/doc/rust/html/book/first-edition/README.html)
 
 
 #### Installing Rust on WSL2 
@@ -31,7 +32,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # stable-x86_64-unknown-linux-gnu installed - rustc 1.83.0 (90b35a623 2024-11-26)
 
 ```
- <img src="images/aoc_12_6_2024.png" width="200" alt="Advent of Code 2024 4 stars December 6th">
+ <img src="images/aoc_12_6_2024.png" width="540" alt="Advent of Code 2024 4 stars December 6th">
 
 AoC2024 and website Courtesy of [Eric Wastl](https://was.tl/)
 
