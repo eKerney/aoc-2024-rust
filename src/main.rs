@@ -88,6 +88,5 @@ fn main() {
     let contents = read_file("./day3/input");
     let lines_vec = lines_to_vec_str(&contents);
     let mul_sum = iterate_lines(lines_vec);
-
     println!("The result for Day3Part1 = {}", mul_sum);
 }
