@@ -31,6 +31,7 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 # stable-x86_64-unknown-linux-gnu installed - rustc 1.83.0 (90b35a623 2024-11-26)
 
 ```
+ <img src="images/aoc_12_6_2024.png" width="200" alt="Advent of Code 2024 4 stars December 6th">
 
 AoC2024 and website Courtesy of [Eric Wastl](https://was.tl/)
 
